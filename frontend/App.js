@@ -33,7 +33,7 @@ const App = () => {
                 options={{
                   tabBarLabel: 'Pantry',
                   tabBarIcon: ({ color }) => (
-                    <MaterialCommunityIcons name = "home" color={color} size={26} /> // Change Icon to Pantry icon
+                    <MaterialCommunityIcons name = "basket" color={color} size={26} /> // Change Icon to Pantry icon
                   ),
                 }}
               />
@@ -43,7 +43,7 @@ const App = () => {
                 options={{
                   tabBarLabel: 'Search',
                   tabBarIcon: ({ color }) => (
-                    <MaterialCommunityIcons name = "home" color={color} size={26} /> // Change Icon to Search icon
+                    <MaterialCommunityIcons name = "archive-search" color={color} size={26} /> // Change Icon to Search icon
                   ),
                 }}
               />
@@ -53,7 +53,7 @@ const App = () => {
                 options={{
                   tabBarLabel: 'Scan',
                   tabBarIcon: ({ color }) => (
-                    <MaterialCommunityIcons name = "home" color={color} size={26} /> // Change Icon to Scan icon
+                    <MaterialCommunityIcons name = "scan-helper" color={color} size={26} /> // Change Icon to Scan icon
                   ),
                 }}
               />
@@ -63,7 +63,7 @@ const App = () => {
                 options={{
                   tabBarLabel: 'Account',
                   tabBarIcon: ({ color }) => (
-                    <MaterialCommunityIcons name = "home" color={color} size={26} /> // Change Icon to Account icon
+                    <MaterialCommunityIcons name = "account" color={color} size={26} /> // Change Icon to Account icon
                   ),
                 }}
               />          
