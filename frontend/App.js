@@ -18,12 +18,32 @@ const App = () => {
             initialRouteName="Home" component={Home}
             >
               <BottomTab.Screen
+                name="Home"
+                component= {Home} // Change to Home page
+                options={{
+                  tabBarLabel: 'Home',
+                  tabBarIcon: ({ color }) => (
+                    <MaterialCommunityIcons name = "home" color={color} size={26} /> // Change Icon to Home icon
+                  ),
+                }}
+              />
+              <BottomTab.Screen
+                name="Pantry"
+                component= {Home} // Change to Pantry page
+                options={{
+                  tabBarLabel: 'Pantry',
+                  tabBarIcon: ({ color }) => (
+                    <MaterialCommunityIcons name = "home" color={color} size={26} /> // Change Icon to Pantry icon
+                  ),
+                }}
+              />
+              <BottomTab.Screen
                 name="Search"
-                component= {Home} // Change to search page
+                component= {Home} // Change to Search page
                 options={{
                   tabBarLabel: 'Search',
                   tabBarIcon: ({ color }) => (
-                    <MaterialCommunityIcons name = "home" color={color} size={26} /> // Change Icon to search icon
+                    <MaterialCommunityIcons name = "home" color={color} size={26} /> // Change Icon to Search icon
                   ),
                 }}
               />
@@ -38,16 +58,6 @@ const App = () => {
                 }}
               />
               <BottomTab.Screen
-                name="Extras"
-                component= {Home} // Change to Extras page
-                options={{
-                  tabBarLabel: 'Extras',
-                  tabBarIcon: ({ color }) => (
-                    <MaterialCommunityIcons name = "home" color={color} size={26} /> // Change Icon to extras icon
-                  ),
-                }}
-              />
-              <BottomTab.Screen
                 name="Account"
                 component= {Home} // Change to Account page
                 options={{
@@ -56,17 +66,7 @@ const App = () => {
                     <MaterialCommunityIcons name = "home" color={color} size={26} /> // Change Icon to Account icon
                   ),
                 }}
-              />
-               <BottomTab.Screen
-                name="Account"
-                component= {Home} // Change to Account page
-                options={{
-                  tabBarLabel: 'Account',
-                  tabBarIcon: ({ color }) => (
-                    <MaterialCommunityIcons name = "home" color={color} size={26} /> // Change Icon to Account icon
-                  ),
-                }}
-              />             
+              />          
           </BottomTab.Navigator>
         </PaperProvider>
       </NavigationContainer>
