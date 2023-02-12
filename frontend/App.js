@@ -57,6 +57,16 @@ const App = () => {
                   ),
                 }}
               />
+               <BottomTab.Screen
+                name="Account"
+                component= {Home} // Change to Account page
+                options={{
+                  tabBarLabel: 'Account',
+                  tabBarIcon: ({ color }) => (
+                    <MaterialCommunityIcons name = "home" color={color} size={26} /> // Change Icon to Account icon
+                  ),
+                }}
+              />             
           </BottomTab.Navigator>
         </PaperProvider>
       </NavigationContainer>
