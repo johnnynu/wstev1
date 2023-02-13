@@ -1,17 +1,16 @@
 import { useState } from "react";
 import { View, Image } from "react-native";
 import { Text, Appbar, Banner } from "react-native-paper";
-
-const PantryRoute = () => <Text>Pantry</Text>;
+import SearchFunc from "../components/SearchFunc";
 
 const Home = () => {
   const [visible, setVisible] = useState(true);
   return (
     <View>
-      <Appbar>
+      <Appbar.Header>
         <Appbar.Content title="Your Pantry" />
         <Appbar.Action icon="dots-vertical" />
-      </Appbar>
+      </Appbar.Header>
       <Banner
         visible={visible}
         actions={[
@@ -24,6 +23,7 @@ const Home = () => {
       >
         You currently have no items in your pantry.
       </Banner>
+      <SearchFunc />
     </View>
   );
 };
