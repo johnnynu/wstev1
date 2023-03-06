@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { View, Image } from "react-native";
 import { Text, Appbar, Banner } from "react-native-paper";
-import SearchFunc from "../components/SearchFunc";
 
 const Home = () => {
   const [visible, setVisible] = useState(true);
@@ -23,7 +22,6 @@ const Home = () => {
       >
         You currently have no items in your pantry.
       </Banner>
-      <SearchFunc />
     </View>
   );
 };
