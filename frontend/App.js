@@ -3,13 +3,14 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import {
   Provider as PaperProvider,
-  BottomNavigation
+  BottomNavigation,
 } from "react-native-paper";
 import Home from "./src/screens/Home";
 import Search from "./src/screens/Search";
 import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
 // const Stack = createNativeStackNavigator();;
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import Scanner from "./src/screens/Scanner";
 
 const BottomTab = createMaterialBottomTabNavigator();
 
@@ -26,7 +27,7 @@ const App = () => {
                 tabBarLabel: "Home",
                 tabBarIcon: ({ color }) => (
                   <MaterialCommunityIcons name="home" color={color} size={26} /> // Change Icon to Home icon
-                )
+                ),
               }}
             />
             <BottomTab.Screen
@@ -40,7 +41,7 @@ const App = () => {
                     color={color}
                     size={26}
                   /> // Change Icon to Pantry icon
-                )
+                ),
               }}
             />
             <BottomTab.Screen
@@ -54,12 +55,12 @@ const App = () => {
                     color={color}
                     size={26}
                   /> // Change Icon to Search icon
-                )
+                ),
               }}
             />
             <BottomTab.Screen
               name="Scan"
-              component={Home} // Change to Scan page
+              component={Scanner} // Change to Scan page
               options={{
                 tabBarLabel: "Scan",
                 tabBarIcon: ({ color }) => (
@@ -68,7 +69,7 @@ const App = () => {
                     color={color}
                     size={26}
                   /> // Change Icon to Scan icon
-                )
+                ),
               }}
             />
             <BottomTab.Screen
@@ -82,7 +83,7 @@ const App = () => {
                     color={color}
                     size={26}
                   /> // Change Icon to Account icon
-                )
+                ),
               }}
             />
           </BottomTab.Navigator>

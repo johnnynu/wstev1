@@ -38,42 +38,29 @@ const Scanner = () => {
 
   // this function sends the picture to cloud services for OCR
   const extractData = async () => {
-    const vision = require("@google-cloud/vision");
-
-    // Creates a client
-    const client = new vision.ImageAnnotatorClient();
-
-    /**
-     * TODO(developer): Uncomment the following line before running the sample.
-     */
-    // const fileName = 'Local image file, e.g. /path/to/image.png';
-
-    // Performs text detection on the local file
-    const [result] = await client.textDetection(
-      "/Users/jorge/seniorProject/code/wste/wstev1/frontend/assets/receipt.jpg"
-    );
-    const detections = result.textAnnotations;
-    console.log("Text:");
-    detections.forEach((text) => console.log(text));
-
     const vision = require("react-cloud-vision-api");
-    vision.init({ auth: "YOUR_API_KEY" });
+    vision.init({ auth: "AIzaSyA3j2rcSViCtMMEEtqWpHnYq8PP7LVvVP8" });
     const req = new vision.Request({
-      image: new vision.Image({
-        base64: photo,
-      }),
+      image: new vision.Image({ base64: photo.base64 }),
       features: [
         new vision.Feature("TEXT_DETECTION", 4),
         new vision.Feature("LABEL_DETECTION", 10),
       ],
     });
 
-    console.log(req);
+    console.log("1");
+
+    vision.annotate(req).then((res) => {
+      console.log(JSON.stringify(res.responses))
+    }, (e) => {
+      console.log("Error: ", e)
+    })
   };
 
   // this function accepts the image and collects the OCR text
   const acceptPicture = () => {
     console.log("Picture Accepted");
+    //console.log(photo.base64);
     extractData();
   };
 
@@ -106,16 +93,23 @@ const Scanner = () => {
           style={styles.preview}
           source={{ uri: "data:image/jpg;base64," + photo.base64 }}
         >
-          <View style={{ flexDirection: "row", justifyContent: "center" }}>
+          <View
+            style={{
+              flex: 1,
+              justifyContent: "flex-end",
+              alignItems: "center",
+              marginBottom: 50,
+            }}
+          >
             <Button icon={"check"} mode="contained" onPress={acceptPicture}>
               Accept
             </Button>
 
             <Button
-              style={{ marginLeft: 10 }}
               icon={"repeat-variant"}
               mode="contained"
               onPress={() => setPhoto(undefined)}
+              style={{ marginTop: 5 }}
             >
               Retake
             </Button>
@@ -129,9 +123,13 @@ const Scanner = () => {
   return (
     <Camera style={styles.container} ref={cameraRef}>
       <View style={styles.buttonContainer}>
-        <Button icon={"camera"} mode="contained" onPress={takePic}>
-          {" "}
-          Take{" "}
+        <Button
+          icon={"camera"}
+          mode="contained"
+          onPress={takePic}
+          style={{ marginBottom: 50 }}
+        >
+          Take
         </Button>
       </View>
 
@@ -148,8 +146,9 @@ const styles = StyleSheet.create({
   },
 
   buttonContainer: {
+    flex: 1,
+    justifyContent: "flex-end",
     alignItems: "center",
-    justifyContent: "center",
   },
 
   preview: {
