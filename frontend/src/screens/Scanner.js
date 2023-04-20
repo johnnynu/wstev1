@@ -8,7 +8,6 @@ import {
 } from "react-native";
 import { useEffect, useRef, useState } from "react";
 import { Camera } from "expo-camera";
-
 import { Button } from "react-native-paper";
 
 const Scanner = () => {
@@ -17,7 +16,7 @@ const Scanner = () => {
   const [hasCameraPermission, setHasCameraPermission] = useState();
   const [photo, setPhoto] = useState();
 
-  //obtains camera persmissions
+  // obtains camera permissions
   useEffect(() => {
     (async () => {
       const cameraPermission = await Camera.requestCameraPermissionsAsync();
@@ -50,21 +49,22 @@ const Scanner = () => {
 
     console.log("1");
 
-    vision.annotate(req).then((res) => {
-      console.log(JSON.stringify(res.responses))
+    return vision.annotate(req).then((res) => {
+      console.log(JSON.stringify(res.responses));
     }, (e) => {
-      console.log("Error: ", e)
-    })
+      console.log("Error: ", e);
+    });
   };
 
   // this function accepts the image and collects the OCR text
   const acceptPicture = () => {
     console.log("Picture Accepted");
-    //console.log(photo.base64);
-    extractData();
+    extractData().finally(() => {
+      setPhoto(undefined);
+    });
   };
 
-  // this function takes the picture and sets 'photo' to the capture image
+  // this function takes the picture and sets 'photo' to the captured image
   let takePic = async () => {
     let options = {
       quality: 1,
@@ -76,7 +76,7 @@ const Scanner = () => {
     setPhoto(capturedPhoto);
   };
 
-  // displays the capture image and prompts the user with the option to discard
+  // displays the captured image and prompts the user with the option to discard
   // or accept the image that was taken
   if (photo) {
     let sharePic = () => {
