@@ -2,10 +2,13 @@ import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Provider as PaperProvider } from "react-native-paper";
-import Home from "./src/screens/Pantry";
+import Home from "./src/screens/Home";
 import Search from "./src/screens/Search";
 import RecipeDetails from "./src/screens/RecipeDetails";
 import AddItemScreen from "./src/screens/AddItem";
+import PantryItem from "./src/screens/PantryItem";
+import Pantry from "./src/screens/Pantry";
+
 import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { FavoritesProvider } from "./src/components/FavoritesContext";
@@ -13,6 +16,17 @@ import { FavoritesProvider } from "./src/components/FavoritesContext";
 const BottomTab = createMaterialBottomTabNavigator();
 const SearchStack = createNativeStackNavigator();
 const PantryStack = createNativeStackNavigator();
+const HomeStack = createNativeStackNavigator();
+
+const HomeStackNavigator = () => (
+  <HomeStack.Navigator>
+    <HomeStack.Screen
+      name="HomeMain"
+      component={Home}
+      options={{ headerShown: false }}
+    />
+  </HomeStack.Navigator>
+);
 
 const SearchStackNavigator = () => (
   <SearchStack.Navigator>
@@ -33,13 +47,18 @@ const PantryStackNavigator = () => (
   <PantryStack.Navigator>
     <PantryStack.Screen
       name="PantryMain"
-      component={Home}
+      component={Pantry}
       options={{ headerShown: false }}
     />
     <PantryStack.Screen
       name="AddItem"
       component={AddItemScreen}
-      options={{ title: "Add Item" }}
+      options={{ headerShown: false }} // Hide the default header
+    />
+    <PantryStack.Screen
+      name="PantryItem"
+      component={PantryItem}
+      options={{ headerShown: false }} // Hide the default header
     />
   </PantryStack.Navigator>
 );
@@ -53,7 +72,7 @@ const App = () => {
             <BottomTab.Navigator initialRouteName="Home" shifting={true}>
               <BottomTab.Screen
                 name="Home"
-                component={Home}
+                component={HomeStackNavigator}
                 options={{
                   tabBarLabel: "Home",
                   tabBarIcon: ({ color }) => (

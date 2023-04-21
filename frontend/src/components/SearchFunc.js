@@ -19,9 +19,19 @@ const SearchFunc = ({ props }) => {
   const navigation = useNavigation();
 
   useEffect(() => {
+    let isMounted = true;
+
     if (!_.isEmpty(searchQuery)) {
       getRecipes();
+    } else {
+      if (isMounted) {
+        setSearchRes([]);
+      }
     }
+
+    return () => {
+      isMounted = false;
+    };
   }, [searchQuery, searchType]);
 
   const { addFavorite, removeFavorite, isFavorite } =

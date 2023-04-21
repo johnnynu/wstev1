@@ -1,11 +1,6 @@
 import React, { useState } from "react";
-import {
-  View,
-  Text,
-  TextInput,
-  StyleSheet,
-  TouchableOpacity
-} from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { TextInput, Button, Appbar } from "react-native-paper";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { collection, addDoc } from "firebase/firestore";
 import { db } from "../components/firebase";
@@ -37,41 +32,50 @@ const AddItem = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>Item Name:</Text>
-      <TextInput
-        style={styles.input}
-        value={itemName}
-        onChangeText={setItemName}
-      />
-
-      <Text style={styles.label}>Expiration Date:</Text>
-      <TouchableOpacity onPress={() => setShowDatePicker(true)}>
+      <Appbar.Header>
+        <Appbar.BackAction onPress={() => navigation.goBack()} />
+        <Appbar.Content title="Add Item" />
+      </Appbar.Header>
+      <View style={styles.content}>
+        <Text style={styles.label}>Item Name:</Text>
         <TextInput
+          mode="outlined"
           style={styles.input}
-          value={expirationDate.toLocaleDateString()}
-          editable={false}
-          pointerEvents="none"
+          value={itemName}
+          onChangeText={setItemName}
         />
-      </TouchableOpacity>
-      {showDatePicker && (
-        <DateTimePicker
-          value={expirationDate}
-          mode="date"
-          display="default"
-          onChange={handleDateChange}
-        />
-      )}
-
-      <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-        <Text style={styles.buttonText}>Add Item</Text>
-      </TouchableOpacity>
+        <Text style={styles.label}>Expiration Date:</Text>
+        <TouchableOpacity onPress={() => setShowDatePicker(true)}>
+          <TextInput
+            mode="outlined"
+            style={styles.input}
+            value={expirationDate.toLocaleDateString()}
+            editable={false}
+            onTouchStart={() => setShowDatePicker(true)}
+          />
+        </TouchableOpacity>
+        {showDatePicker && (
+          <DateTimePicker
+            value={expirationDate}
+            mode="date"
+            display="default"
+            onChange={handleDateChange}
+          />
+        )}
+        <Button mode="contained" onPress={handleSubmit} style={styles.button}>
+          Add Item
+        </Button>
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: 1
+  },
+  content: {
+    // Add this new style
     paddingHorizontal: 20,
     paddingTop: 20
   },
@@ -80,22 +84,10 @@ const styles = StyleSheet.create({
     marginBottom: 10
   },
   input: {
-    fontSize: 16,
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 4,
-    padding: 10,
     marginBottom: 20
   },
   button: {
-    backgroundColor: "#2196F3",
-    padding: 10,
-    borderRadius: 4
-  },
-  buttonText: {
-    color: "white",
-    textAlign: "center",
-    fontSize: 18
+    marginTop: 10
   }
 });
 

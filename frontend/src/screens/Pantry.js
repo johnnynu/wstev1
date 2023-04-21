@@ -1,13 +1,21 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, Image, FlatList } from "react-native";
-import { Button, Card, Title, Paragraph } from "react-native-paper";
+import {
+  Button,
+  Card,
+  Title,
+  Paragraph,
+  Appbar,
+  IconButton,
+  TouchableRipple
+} from "react-native-paper";
 import { app, db } from "../components/firebase";
 import {
   collection,
-  query,
-  onSnapshot,
   orderBy,
-  getDocs
+  getDocs,
+  doc,
+  deleteDoc
 } from "firebase/firestore";
 
 const Pantry = ({ navigation }) => {
@@ -34,24 +42,49 @@ const Pantry = ({ navigation }) => {
     return unsubscribe;
   }, [navigation]);
 
+  const handleDelete = async (id) => {
+    try {
+      await deleteDoc(doc(db, "pantry", id));
+      setPantryItems(pantryItems.filter((item) => item.id !== id));
+    } catch (error) {
+      console.error("Error removing document: ", error);
+    }
+  };
+
   const renderItem = ({ item }) => {
     const expirationDate = new Date(item.expirationDate.seconds * 1000);
     return (
-      <Card style={styles.card}>
-        <Card.Content>
-          <Title>{item.name}</Title>
-          <Paragraph>
-            Expiration Date: {expirationDate.toDateString()}
-          </Paragraph>
-        </Card.Content>
-      </Card>
+      <TouchableRipple
+        onPress={() => navigation.navigate("PantryItem", { item })}
+        style={styles.card}
+      >
+        <Card>
+          <Card.Content style={styles.cardContent}>
+            <View style={styles.itemInfo}>
+              <Title style={styles.itemTitle}>{item.name}</Title>
+              <Paragraph style={styles.itemDate}>
+                Expires: {expirationDate.toDateString()}
+              </Paragraph>
+            </View>
+            <IconButton
+              icon="close"
+              size={20}
+              onPress={() => handleDelete(item.id)}
+              style={styles.deleteButton}
+            />
+          </Card.Content>
+        </Card>
+      </TouchableRipple>
     );
   };
 
   return (
     <View style={styles.container}>
+      <Appbar.Header>
+        <Appbar.Content title="Your Pantry" />
+      </Appbar.Header>
       {pantryItems.length === 0 ? (
-        <>
+        <View style={styles.emptyPantryContainer}>
           <Image
             source={require("./IceCreamDoodle.png")}
             style={{ width: 200, height: 200 }}
@@ -60,7 +93,7 @@ const Pantry = ({ navigation }) => {
           <Text style={styles.subtitle}>
             Get started by adding items to your pantry.
           </Text>
-        </>
+        </View>
       ) : (
         <FlatList
           data={pantryItems}
@@ -83,10 +116,12 @@ const Pantry = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1
+  },
+  emptyPantryContainer: {
     flex: 1,
     alignItems: "center",
-    justifyContent: "center",
-    paddingHorizontal: 20
+    justifyContent: "center"
   },
   title: {
     fontSize: 24,
@@ -99,17 +134,39 @@ const styles = StyleSheet.create({
     marginBottom: 20
   },
   addButton: {
-    marginTop: 20
+    width: "100%", // Set the button width to 80% of the screen width
+    alignSelf: "center", // Align the button to the center
+    marginTop: 20,
+    marginBottom: 10
   },
   list: {
     width: "100%",
-    marginTop: 60
+    marginTop: 10
   },
   listContent: {
     paddingBottom: 20
   },
   card: {
-    marginBottom: 10
+    marginBottom: 10,
+    marginHorizontal: 20
+  },
+  cardContent: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center"
+  },
+  itemInfo: {
+    flexDirection: "column"
+  },
+  itemDate: {
+    fontSize: 14,
+    color: "#999"
+  },
+  deleteButton: {
+    position: "absolute",
+    top: 0,
+    right: 0,
+    margin: 0
   }
 });
 

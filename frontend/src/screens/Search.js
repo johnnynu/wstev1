@@ -19,7 +19,6 @@ const Search = () => {
     <View style={styles.container}>
       <Appbar.Header>
         <Appbar.Content title="Search" />
-        <Appbar.Action icon="dots-vertical" onPress={() => {}} />
       </Appbar.Header>
       <View style={styles.searchContainer}>
         <Searchbar
