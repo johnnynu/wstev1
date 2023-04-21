@@ -2,15 +2,17 @@ import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Provider as PaperProvider } from "react-native-paper";
-import Home from "./src/screens/Home";
+import Home from "./src/screens/Pantry";
 import Search from "./src/screens/Search";
 import RecipeDetails from "./src/screens/RecipeDetails";
+import AddItemScreen from "./src/screens/AddItem";
 import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { FavoritesProvider } from "./src/components/FavoritesContext";
 
 const BottomTab = createMaterialBottomTabNavigator();
 const SearchStack = createNativeStackNavigator();
+const PantryStack = createNativeStackNavigator();
 
 const SearchStackNavigator = () => (
   <SearchStack.Navigator>
@@ -25,6 +27,21 @@ const SearchStackNavigator = () => (
       options={{ title: "Recipe Details" }}
     />
   </SearchStack.Navigator>
+);
+
+const PantryStackNavigator = () => (
+  <PantryStack.Navigator>
+    <PantryStack.Screen
+      name="PantryMain"
+      component={Home}
+      options={{ headerShown: false }}
+    />
+    <PantryStack.Screen
+      name="AddItem"
+      component={AddItemScreen}
+      options={{ title: "Add Item" }}
+    />
+  </PantryStack.Navigator>
 );
 
 const App = () => {
@@ -50,7 +67,7 @@ const App = () => {
               />
               <BottomTab.Screen
                 name="Pantry"
-                component={Home}
+                component={PantryStackNavigator}
                 options={{
                   tabBarLabel: "Pantry",
                   tabBarIcon: ({ color }) => (
