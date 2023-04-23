@@ -28,7 +28,6 @@ const Pantry = ({ navigation }) => {
           collection(db, "pantry"),
           orderBy("expirationDate")
         );
-        console.log(querySnapshot);
         const items = [];
         querySnapshot.forEach((doc) => {
           items.push({ id: doc.id, ...doc.data() });

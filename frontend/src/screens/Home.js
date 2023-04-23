@@ -9,7 +9,7 @@ const Home = ({ navigation }) => {
         <Appbar.Content title="Home" />
       </Appbar.Header>
       <View style={styles.content}>
-        <Text style={styles.title}>Welcome to Your App</Text>
+        <Text style={styles.title}>Welcome to Wste</Text>
         <Text style={styles.subtitle}>
           Manage your pantry and discover new recipes.
         </Text>
