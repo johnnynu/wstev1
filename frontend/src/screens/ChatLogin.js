@@ -7,8 +7,6 @@ import { useChatGpt } from "react-native-chatgpt";
 const ChatLogin = () => {
   const { login } = useChatGpt();
   return (
-    //TODO
-    // Change the logo to app logo instead of the chatgpt logo
     <View style={styles.container}>
       <Image
         style={styles.image}

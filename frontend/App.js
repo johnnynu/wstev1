@@ -8,8 +8,6 @@ import RecipeDetails from "./src/screens/RecipeDetails";
 import AddItemScreen from "./src/screens/AddItem";
 import PantryItem from "./src/screens/PantryItem";
 import Pantry from "./src/screens/Pantry";
-
-import ChatLogin from "./src/screens/ChatLogin";
 import ChatAssistant from "./src/screens/ChatAssistant";
 
 import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
@@ -120,7 +118,7 @@ const App = () => {
 
                 <BottomTab.Screen
                   name="Scan"
-                  component={ChatLogin}
+                  component={ChatAssistant}
                   options={{
                     tabBarLabel: "Scan",
                     tabBarIcon: ({ color }) => (
