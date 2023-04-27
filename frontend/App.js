@@ -14,6 +14,7 @@ import { createMaterialBottomTabNavigator } from "@react-navigation/material-bot
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { FavoritesProvider } from "./src/components/FavoritesContext";
 import { ChatGptProvider } from "react-native-chatgpt";
+import Scanner from "./src/screens/Scanner";
 
 const BottomTab = createMaterialBottomTabNavigator();
 const SearchStack = createNativeStackNavigator();
