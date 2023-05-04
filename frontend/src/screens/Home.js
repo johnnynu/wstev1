@@ -1,6 +1,6 @@
 import React from "react";
 import { View, StyleSheet } from "react-native";
-import { Text, Button, Appbar } from "react-native-paper";
+import { Text, Button, Appbar, List, Switch } from "react-native-paper";
 
 const Home = ({ navigation }) => {
   return (

@@ -9,12 +9,14 @@ const AddItem = ({ navigation }) => {
   const [itemName, setItemName] = useState("");
   const [expirationDate, setExpirationDate] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
+  const [calories, setCalories] = useState(0);
 
   const handleSubmit = async () => {
     try {
       const docRef = await addDoc(collection(db, "pantry"), {
         name: itemName,
-        expirationDate: expirationDate
+        expirationDate: expirationDate,
+        calories: calories
       });
       console.log("Document written with ID: ", docRef.id);
       navigation.goBack();
@@ -53,6 +55,13 @@ const AddItem = ({ navigation }) => {
             editable={false}
             onTouchStart={() => setShowDatePicker(true)}
           />
+        <Text style={styles.label}>Calories:</Text>
+        <TextInput
+          mode="outlined"
+          style={styles.input}
+          value={Number(calories)}
+          onChangeText={setCalories}
+        />
         </TouchableOpacity>
         {showDatePicker && (
           <DateTimePicker

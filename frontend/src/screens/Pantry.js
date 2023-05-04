@@ -17,8 +17,11 @@ import {
   doc,
   deleteDoc
 } from "firebase/firestore";
+import CalorieCountContext from '../components/CalorieCountContext';
 
 const Pantry = ({ navigation }) => {
+  const { addCalorieCount } = React.useContext(CalorieCountContext);
+
   const [pantryItems, setPantryItems] = useState([]);
 
   useEffect(() => {
@@ -41,10 +44,17 @@ const Pantry = ({ navigation }) => {
     return unsubscribe;
   }, [navigation]);
 
-  const handleDelete = async (id) => {
+  const handleDelete = async (id, deletedItem) => {
     try {
       await deleteDoc(doc(db, "pantry", id));
       setPantryItems(pantryItems.filter((item) => item.id !== id));
+
+      // Add the calories from the deleted item to the context
+      if (deletedItem) {
+        const calories = deletedItem.calories;
+        ((count) => count + calories);
+      }
+
     } catch (error) {
       console.error("Error removing document: ", error);
     }
@@ -68,7 +78,7 @@ const Pantry = ({ navigation }) => {
             <IconButton
               icon="close"
               size={20}
-              onPress={() => handleDelete(item.id)}
+              onPress={() => handleDelete(item.id, item)}
               style={styles.deleteButton}
             />
           </Card.Content>

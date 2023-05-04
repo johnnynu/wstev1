@@ -9,6 +9,7 @@ import AddItemScreen from "./src/screens/AddItem";
 import PantryItem from "./src/screens/PantryItem";
 import Pantry from "./src/screens/Pantry";
 import ChatAssistant from "./src/screens/ChatAssistant";
+import Account from "./src/screens/Account"
 
 import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
@@ -134,7 +135,7 @@ const App = () => {
 
                 <BottomTab.Screen
                   name="Account"
-                  component={Home}
+                  component={Account}
                   options={{
                     tabBarLabel: "Account",
                     tabBarIcon: ({ color }) => (
