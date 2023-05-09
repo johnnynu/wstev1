@@ -3,7 +3,6 @@ import { View, StyleSheet } from "react-native";
 import { Text, Button, Appbar, List, Switch, Checkbox, Menu } from "react-native-paper";
 import { collection, query, where, onSnapshot } from "firebase/firestore";
 import { db } from "../components/firebase";
-// import MySettingsMenu from "./MySettingsMenu";
 
 const Account = ({ navigation }) => {
     const [isEnabled, setIsEnabled] = React.useState(false);
