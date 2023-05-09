@@ -3,76 +3,68 @@ import { View, StyleSheet } from "react-native";
 import { Text, Button, Appbar, List, Switch, Checkbox, Menu } from "react-native-paper";
 import { collection, query, where, onSnapshot } from "firebase/firestore";
 import { db } from "../components/firebase";
+// import MySettingsMenu from "./MySettingsMenu";
 
 const Account = ({ navigation }) => {
     const [isEnabled, setIsEnabled] = React.useState(false);
-    const [calorieCount, setCalories] = React.useState(0);
-    const [menuVisible, setMenuVisible] = React.useState(false);
-    const [selections, setSelections] = React.useState({
-        option1: false,
-        option2: false,
-        option3: false,
-    });
+    const [calorieCount, setCalories] = React.useState(250);
+    const [selectedOption, setSelectedOption] = React.useState('option1');
+    const [menuOpen, setMenuOpen] = React.useState(false);
+
+    const _handleOptionPress = (option) => setSelectedOption(option);
+    const _handleMenuPress = () => setMenuOpen(!menuOpen);
 
     const toggleOption = (option) => {
         setSelections({ ...selections, [option]: !selections[option] });
     };
 
-    const handleMenuPress = () => {
-        setMenuVisible(true);
-    };
-
-    const handleMenuDismiss = () => {
-        setMenuVisible(false);
-    };
-
     // Reference to Firestore collection
     const collectionRef = collection(db, 'pantry');
 
-    React.useEffect(() => {
-        console.log('setting up listener...');
-        const unsubscribe = onSnapshot(
-            query(collectionRef, where('deleted', '==', true)),
-            (snapshot) => {
-                console.log('snapshot received:', snapshot);
-                snapshot.docChanges().forEach((change) => {
-                    console.log('document change:', change.type, change.doc.data());
-                    // handle document changes here
-                });
-            },
-            (error) => {
-                console.error('error getting snapshot:', error);
-            }
-        );
+    // React.useEffect(() => {
+    //     console.log('setting up listener...');
+    //     const unsubscribe = onSnapshot(
+    //         query(collectionRef, where('deleted', '==', true)),
+    //         (snapshot) => {
+    //             console.log('snapshot received:', snapshot);
+    //             snapshot.docChanges().forEach((change) => {
+    //                 console.log('document change:', change.type, change.doc.data());
+    //                 // handle document changes here
+    //             });
+    //         },
+    //         (error) => {
+    //             console.error('error getting snapshot:', error);
+    //         }
+    //     );
 
-        return () => {
-            console.log('cleaning up listener...');
-            unsubscribe();
-        };
-    }, []);
+    //     return () => {
+    //         console.log('cleaning up listener...');
+    //         unsubscribe();
+    //     };
+    // }, []);
     // Watch for changes in the collection
-    React.useEffect(() => {
-        const unsubscribe = onSnapshot(
-            query(collectionRef, where("deleted", "==", true)),
-            (snapshot) => {
-                snapshot.docChanges().forEach((change) => {
-                    if (change.type === "removed") {
-                        console.log("item removed");
-                        const deletedItem = change.doc.data();
-                        // Check if the item expired and was removed or was consumed.
-                        const currentDate = new Date();
-                        const expiration = new Date(deletedItem.expirationDate);
-                        console.log(expiration)
-                        if (expiration > currentDate) {
-                            setCalories((count) => count + deletedItem.number);
-                        }
-                    }
-                });
-            }
-        );
+    // React.useEffect(() => {
+    //     const unsubscribe = onSnapshot(
+    //         query(collectionRef, where("deleted", "==", true)),
+    //         (snapshot) => {
+    //             snapshot.docChanges().forEach((change) => {
+    //                 if (change.type === "removed") {
+    //                     console.log("item removed");
+    //                     const deletedItem = change.doc.data();
+    //                     // Check if the item expired and was removed or was consumed.
+    //                     const currentDate = new Date();
+    //                     const expiration = new Date(deletedItem.expirationDate);
+    //                     console.log(expiration)
+    //                     if (expiration > currentDate) {
+    //                         setCalories((count) => count + deletedItem.number);
+    //                     }
+    //                 }
+    //             });
+    //         }
+    //     );
 
-        return unsubscribe;
-    }, []);
+    //     return unsubscribe;
+    // }, []);
 
     const toggleSwitch = () => {
         setIsEnabled(previousState => !previousState);
@@ -83,32 +75,29 @@ const Account = ({ navigation }) => {
         <View style={styles.container}>
             <Appbar.Header>
                 <Appbar.Content title="Account" />
-                <Appbar.Action icon="menu" onPress={handleMenuPress} />
-                <Menu
-                    visible={menuVisible}
-                    onDismiss={handleMenuDismiss}
-                    anchor={<Appbar.Action icon="dots-vertical" />}>
-                    <Menu.Item
-                        title="Today"
-                        onPress={() => toggleOption('option1')}
-                        checked={selections.option1}
-                        status={selections.option1 ? 'checked' : 'unchecked'}
-                    />
-                    <Menu.Item
-                        title="Past Week"
-                        onPress={() => toggleOption('option2')}
-                        checked={selections.option2}
-                        status={selections.option2 ? 'checked' : 'unchecked'}
-                    />
-                    <Menu.Item
-                        title="Past Month"
-                        onPress={() => toggleOption('option3')}
-                        checked={selections.option3}
-                        status={selections.option3 ? 'checked' : 'unchecked'}
-                    />
-                </Menu>
+                <Appbar.Action icon="dots-vertical" onPress={_handleMenuPress} />
             </Appbar.Header>
-
+            <View>
+                {menuOpen && (
+                <>
+                    <Checkbox.Item
+                        label="Today"
+                        status={selectedOption === 'option1' ? 'checked' : 'unchecked'}
+                        onPress={() => _handleOptionPress('option1')}
+                    />
+                    <Checkbox.Item
+                        label="Last Week"
+                        status={selectedOption === 'option2' ? 'checked' : 'unchecked'}
+                        onPress={() => _handleOptionPress('option2')}
+                    />
+                    <Checkbox.Item
+                        label="Last Month"
+                        status={selectedOption === 'option3' ? 'checked' : 'unchecked'}
+                        onPress={() => _handleOptionPress('option3')}
+                    />
+                </>
+            )}
+            </View>
             <List.Section>
                 <List.Item
                     title="Calories Consumed"
