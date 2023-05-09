@@ -4,7 +4,7 @@ import { TextInput, Button, Appbar } from "react-native-paper";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { collection, addDoc } from "firebase/firestore";
 import { db } from "../components/firebase";
-
+import { auth } from "../components/firebase";
 const AddItem = ({ navigation }) => {
   const [itemName, setItemName] = useState("");
   const [expirationDate, setExpirationDate] = useState(new Date());
@@ -12,7 +12,8 @@ const AddItem = ({ navigation }) => {
 
   const handleSubmit = async () => {
     try {
-      const docRef = await addDoc(collection(db, "pantry"), {
+      const user = auth.currentUser;
+      const docRef = await addDoc(collection(db, "pantry",user.uid, "items"), {
         name: itemName,
         expirationDate: expirationDate
       });
