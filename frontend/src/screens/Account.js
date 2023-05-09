@@ -6,7 +6,7 @@ import { db } from "../components/firebase";
 
 const Account = ({ navigation }) => {
     const [isEnabled, setIsEnabled] = React.useState(false);
-    const [calorieCount, setCalories] = React.useState(250);
+    const [calorieCount, setCalories] = React.useState(0);
     const [selectedOption, setSelectedOption] = React.useState('option1');
     const [menuOpen, setMenuOpen] = React.useState(false);
 
@@ -16,6 +16,14 @@ const Account = ({ navigation }) => {
     const toggleOption = (option) => {
         setSelections({ ...selections, [option]: !selections[option] });
     };
+
+    const day = 200;
+    const week = 10000;
+    const month = 21250;
+
+
+
+    // Temp Values with the dates selected
 
     // Reference to Firestore collection
     const collectionRef = collection(db, 'pantry');
@@ -97,10 +105,11 @@ const Account = ({ navigation }) => {
                 </>
             )}
             </View>
-            <List.Section>
+            {(selectedOption == 'option1') && (
+                <List.Section>
                 <List.Item
-                    title="Calories Consumed"
-                    titleStyle={{ fontSize: 24 }}
+                    title="Calories Consumed Today"
+                    titleStyle={{ fontSize: 18 }}
                     right={() => (
                         <Switch
                             value={isEnabled}
@@ -111,13 +120,61 @@ const Account = ({ navigation }) => {
                 />
                 {!isEnabled && (
                     <List.Item
-                        title={calorieCount.toString()}
+                        title={day.toString()}
                         titleStyle={{ fontSize: 24, marginTop: -40 }}
                         description="Items"
                         descriptionStyle={{ marginLeft: 10 }}
                     />
                 )}
             </List.Section>
+            )}
+            {(selectedOption == 'option2') && (
+                <List.Section>
+                <List.Item
+                    title="Calories Consumed This Week"
+                    titleStyle={{ fontSize: 18 }}
+                    right={() => (
+                        <Switch
+                            value={isEnabled}
+                            onValueChange={toggleSwitch}
+                        />
+                    )}
+                //   descriptionStyle={{ marginTop:  }}
+                />
+                {!isEnabled && (
+                    <List.Item
+                        title={week.toString()}
+                        titleStyle={{ fontSize: 24, marginTop: -40 }}
+                        description="Items"
+                        descriptionStyle={{ marginLeft: 10 }}
+                    />
+                )}
+            </List.Section>
+            )}
+            {(selectedOption == 'option3') && (
+                <List.Section>
+                <List.Item
+                    title="Calories Consumed This Month "
+                    titleStyle={{ fontSize: 18 }}
+                    right={() => (
+                        <Switch
+                            value={isEnabled}
+                            onValueChange={toggleSwitch}
+                        />
+                    )}
+                //   descriptionStyle={{ marginTop:  }}
+                />
+                {!isEnabled && (
+                    <List.Item
+                        title={month.toString()}
+                        titleStyle={{ fontSize: 24, marginTop: -40 }}
+                        description="Items"
+                        descriptionStyle={{ marginLeft: 10 }}
+                    />
+                )}
+            </List.Section>
+            )}
+            
             <View style={styles.content}>
                 <Text style={styles.title}>Welcome to Wste</Text>
                 <Text style={styles.subtitle}>
