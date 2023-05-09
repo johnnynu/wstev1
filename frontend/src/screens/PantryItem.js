@@ -4,7 +4,8 @@ import {
   StyleSheet,
   TouchableOpacity,
   TextInput,
-  ScrollView
+  ScrollView,
+  Modal
 } from "react-native";
 import {
   Text,
@@ -15,6 +16,7 @@ import {
   Paragraph,
   ActivityIndicator
 } from "react-native-paper";
+import { ScrollView } from "react-native-gesture-handler";
 import { fetchUnsplashImage } from "../components/unsplash";
 import { getDocs, collection, updateDoc, doc } from "firebase/firestore";
 import { db } from "../components/firebase";
@@ -36,6 +38,8 @@ const PantryItem = ({ route, navigation }) => {
 
   // this use effect calls the fetchUnsplashImage function
   // immediately once were shown the page, to get a stock photo
+  const [nutrientData, setNutrientData] = useState(null);
+  const [showNutrientModal, setShowNutrientModal] = useState(false);
   useEffect(() => {
     const fetchImage = async () => {
       console.log("Fetching image...");
@@ -67,7 +71,7 @@ const PantryItem = ({ route, navigation }) => {
   // by clicking on the date itself
   const updateExpirationDate = async (date) => {
     try {
-      const pantryRef = doc(db, "pantry", id);
+      const pantryRef = doc(db, "pantries", user.uid, "items", id);
       await updateDoc(pantryRef, {
         expirationDate: date
       });
@@ -137,6 +141,29 @@ const PantryItem = ({ route, navigation }) => {
     };
     return new Intl.DateTimeFormat("en-US", options).format(date);
   };
+  const handleDisplayNutrient = async (itemName) => {
+    console.log("showNutrientModal set to true");
+    try {
+      const response = await fetch(
+        `https://api.nal.usda.gov/fdc/v1/foods/search?api_key=${USDA_API_KEY}&query=${item.name}`
+      );
+      const data = await response.json();
+      if (data.foods && data.foods.length > 0) {
+        const fdcId = data.foods[0].fdcId;
+        const nutrientResponse = await fetch(
+          `https://api.nal.usda.gov/fdc/v1/food/${fdcId}?api_key=${USDA_API_KEY}`
+        );
+        const nutrientData = await nutrientResponse.json();
+        setNutrientData(nutrientData.foodNutrients.slice(0, 8));
+        setShowNutrientModal(true);
+        console.log("showNutrientModal set to true");
+      } else {
+        console.error("No nutrient data found.");
+      }
+    } catch (error) {
+      console.error("Error fetching nutrient data: ", error);
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -150,15 +177,12 @@ const PantryItem = ({ route, navigation }) => {
         )}
         <Card.Content style={styles.textContainer}>
           <Title style={styles.itemName}>{name}</Title>
-          <TouchableOpacity
-            onPress={() => setShowDatePicker(true)}
-            style={styles.editableDateContainer}
-          >
-            <Paragraph style={styles.expirationDate}>
-              Expiration Date: {formatDate(newDate).toString()}
-            </Paragraph>
-            <Icon name="pencil" size={18} color="#5D3FD3" />
+          <TouchableOpacity onPress={() => handleDisplayNutrient(name)}>
+            <View style={styles.nutrientButton}>
+              <Text style={styles.nutrientButtonText}>Nutrients</Text>
+            </View>
           </TouchableOpacity>
+
           {showDatePicker && (
             <DateTimePicker
               value={newDate}
@@ -173,6 +197,31 @@ const PantryItem = ({ route, navigation }) => {
               }}
             />
           )}
+
+          <View style={styles.editableDateContainer}>
+            <Text style={styles.expirationDate}>Expires:</Text>
+            {editable ? (
+              <DateTimePicker
+                value={newDate}
+                mode="date"
+                display="default"
+                onChange={(event, selectedDate) => {
+                  setShowDatePicker(false);
+                  if (selectedDate) {
+                    setNewDate(selectedDate);
+                    updateExpirationDate(selectedDate);
+                  }
+                }}
+              />
+            ) : (
+              <TouchableOpacity onPress={() => setEditable(true)}>
+                <View style={{ flexDirection: "row" }}>
+                  <Text>{formatDate(newDate)}</Text>
+                  <Icon name="pencil" size={20} color="#5D3FD3" />
+                </View>
+              </TouchableOpacity>
+            )}
+          </View>
         </Card.Content>
       </Card>
       <View style={styles.recommendedRecipesContainer}>

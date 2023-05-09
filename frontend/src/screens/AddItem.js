@@ -4,7 +4,7 @@ import { TextInput, Button, Appbar } from "react-native-paper";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { collection, addDoc } from "firebase/firestore";
 import { db } from "../components/firebase";
-
+import { auth } from "../components/firebase";
 const AddItem = ({ navigation }) => {
   // our new item will have a name, expiration date, and a date when getting sent
   // to the database
@@ -15,7 +15,8 @@ const AddItem = ({ navigation }) => {
   // this function adds the item to the database
   const handleSubmit = async () => {
     try {
-      const docRef = await addDoc(collection(db, "pantry"), {
+      const user = auth.currentUser;
+      const docRef = await addDoc(collection(db, "pantry",user.uid, "items"), {
         name: itemName,
         expirationDate: expirationDate
       });
