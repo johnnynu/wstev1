@@ -21,6 +21,7 @@ import {
 const Pantry = ({ navigation }) => {
   const [pantryItems, setPantryItems] = useState([]);
 
+  // the useEffect here pulls the data from the database and stores it in the pantryItems array
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", async () => {
       try {
@@ -41,6 +42,8 @@ const Pantry = ({ navigation }) => {
     return unsubscribe;
   }, [navigation]);
 
+  // this function deletes the item from the database
+  // and removes it from the pantryItems array
   const handleDelete = async (id) => {
     try {
       await deleteDoc(doc(db, "pantry", id));
@@ -50,11 +53,15 @@ const Pantry = ({ navigation }) => {
     }
   };
 
+  // displays the item on the screen
   const renderItem = ({ item }) => {
     const expirationDate = new Date(item.expirationDate.seconds * 1000);
+
     return (
       <TouchableRipple
-        onPress={() => navigation.navigate("PantryItem", { item })}
+        onPress={() => {
+          navigation.navigate("PantryItem", { item });
+        }}
         style={styles.card}
       >
         <Card>

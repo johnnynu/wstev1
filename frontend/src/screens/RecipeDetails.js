@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, StyleSheet, ScrollView } from "react-native";
+import { View, StyleSheet, ScrollView, Dimensions } from "react-native";
 import {
   Avatar,
   Title,
@@ -8,11 +8,12 @@ import {
   Card,
   List,
   IconButton,
-  useTheme
+  useTheme,
+  Appbar
 } from "react-native-paper";
 import FavoritesContext from "../components/FavoritesContext";
 
-const RecipeDetails = ({ route }) => {
+const RecipeDetails = ({ route, navigation }) => {
   const { recipe } = route.params;
   const [recipeDetails, setRecipeDetails] = useState(null);
   const [instructions, setInstructions] = useState(null);
@@ -57,6 +58,10 @@ const RecipeDetails = ({ route }) => {
 
   return (
     <ScrollView>
+      <Appbar.Header styles={styles.header}>
+        <Appbar.BackAction onPress={() => navigation.goBack()} />
+        <Appbar.Content title="Recipe Details" />
+      </Appbar.Header>
       <View style={styles.container}>
         <Card>
           <Card.Cover source={{ uri: recipe.image }} style={styles.cardCover} />

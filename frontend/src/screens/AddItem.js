@@ -6,10 +6,13 @@ import { collection, addDoc } from "firebase/firestore";
 import { db } from "../components/firebase";
 
 const AddItem = ({ navigation }) => {
+  // our new item will have a name, expiration date, and a date when getting sent
+  // to the database
   const [itemName, setItemName] = useState("");
   const [expirationDate, setExpirationDate] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
 
+  // this function adds the item to the database
   const handleSubmit = async () => {
     try {
       const docRef = await addDoc(collection(db, "pantry"), {
@@ -23,6 +26,7 @@ const AddItem = ({ navigation }) => {
     }
   };
 
+  // this function handles the date picker
   const handleDateChange = (event, selectedDate) => {
     setShowDatePicker(false);
     if (selectedDate) {

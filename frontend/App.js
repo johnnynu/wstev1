@@ -38,7 +38,7 @@ const SearchStackNavigator = () => (
     <SearchStack.Screen
       name="RecipeDetails"
       component={RecipeDetails}
-      options={{ title: "Recipe Details" }}
+      options={{ headerShown: false }}
     />
   </SearchStack.Navigator>
 );
@@ -59,6 +59,11 @@ const PantryStackNavigator = () => (
       name="PantryItem"
       component={PantryItem}
       options={{ headerShown: false }} // Hide the default header
+    />
+    <PantryStack.Screen
+      name="RecipeDetails"
+      component={RecipeDetails}
+      options={{ headerShown: false }}
     />
   </PantryStack.Navigator>
 );
