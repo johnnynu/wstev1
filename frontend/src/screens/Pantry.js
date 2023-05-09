@@ -25,7 +25,7 @@ import {
   deleteDoc
 } from "firebase/firestore";
 import NutrientModal from "../components/NutrientModal"
-
+import { auth } from "../components/firebase";
 const USDA_API_KEY = "EA6bttzjzgJuyrtd9V2kKciMSPqhsk1PxG9iTZqM";
 
 const Pantry = ({ navigation }) => {
@@ -36,10 +36,11 @@ const Pantry = ({ navigation }) => {
 
   // Fetch pantry items from Firestore and update state
   useEffect(() => {
+    const user = auth.currentUser;
     const unsubscribe = navigation.addListener("focus", async () => {
       try {
         const querySnapshot = await getDocs(
-          collection(db, "pantry"),
+          collection(db, "pantry",user.uid,"items"),
           orderBy("expirationDate")
         );
         const items = [];
@@ -57,7 +58,7 @@ const Pantry = ({ navigation }) => {
   // Delete an item from the pantry and update state
   const handleDelete = async (id) => {
     try {
-      await deleteDoc(doc(db, "pantry", id));
+      await deleteDoc(doc(db, "pantries", user.uid, "items", id));
       setPantryItems(pantryItems.filter((item) => item.id !== id));
     } catch (error) {
       console.error("Error removing document: ", error);
@@ -85,7 +86,7 @@ const Pantry = ({ navigation }) => {
   };
   
   const renderItem = ({ item }) => {
-    const expirationDate = new Date(item.expirationDate.seconds * 1000);
+     const expirationDate = new Date(item.expirationDate?.seconds * 1000);
 
     return (
       <TouchableRipple

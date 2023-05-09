@@ -14,7 +14,16 @@ import { updateDoc, doc } from "firebase/firestore";
 import { db } from "../components/firebase";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import "intl"
+import 'intl/locale-data/jsonp/en-US';
+
 const USDA_API_KEY = "EA6bttzjzgJuyrtd9V2kKciMSPqhsk1PxG9iTZqM";
+
+
+// call the Polyfill function to provide the Intl object
+if (!global.Intl) {
+  global.Intl = require('intl');
+}
 
 const PantryItem = ({ route, navigation }) => {
   const { item } = route.params;
@@ -36,7 +45,7 @@ const PantryItem = ({ route, navigation }) => {
   }, [name]);
   const updateExpirationDate = async (date) => {
     try {
-      const pantryRef = doc(db, "pantry", id);
+      const pantryRef = doc(db, "pantries", user.uid, "items", id);
       await updateDoc(pantryRef, {
         expirationDate: date
       });

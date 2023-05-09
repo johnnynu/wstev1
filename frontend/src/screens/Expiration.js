@@ -14,11 +14,11 @@ import {
   onSnapshot,
   deleteDoc,
 } from "firebase/firestore";
-import { doc } from "@firebase/firestore";
+import { doc } from "firebase/firestore";
 import { db } from "../components/firebase";
 import Modal from "react-native-modal";
 import axios from "axios";
-
+import { auth } from "../components/firebase";
 const Expiration = () => {
   const [itemsExpiringInAWeek, setItemsExpiringInAWeek] = useState([]);
   const [itemsExpiringInADay, setItemsExpiringInADay] = useState([]);
@@ -32,8 +32,9 @@ const Expiration = () => {
     setItemImage(null);
     };
     useEffect(() => {
+      const user = auth.currentUser;
       const q = query(
-        collection(db, "pantry"),
+        collection(db, "pantry",user.uid,"items"),
         where(
           "expirationDate",
           "<=",
@@ -77,7 +78,7 @@ const Expiration = () => {
 
 
 const handleDeleteItem = (id, name) => {
-const itemRef = doc(db, "pantry", id);
+const itemRef = doc(db, "pantries", user.uid, "items", id);
 deleteDoc(itemRef);
 setItemName(name);
 };
