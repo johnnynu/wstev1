@@ -6,7 +6,7 @@ import { db } from "../components/firebase";
 
 const Account = ({ navigation }) => {
     const [isEnabled, setIsEnabled] = React.useState(false);
-    const [calorieCount, setCalories] = React.useState(50);
+    const [calorieCount, setCalories] = React.useState(0);
     const [menuVisible, setMenuVisible] = React.useState(false);
     const [selections, setSelections] = React.useState({
         option1: false,
