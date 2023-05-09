@@ -1,37 +1,34 @@
 import React, { useState, useEffect } from "react";
+import { View, Text, StyleSheet, Image, FlatList, Modal } from "react-native";
 import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  FlatList,
-  TouchableWithoutFeedback
-} from "react-native";
-import {
-  Button,
-  Card,
-  Title,
-  Paragraph,
-  Appbar,
-  IconButton,
-  TouchableRipple
+    Button,
+    Card,
+    Title,
+    Paragraph,
+    Appbar,
+    IconButton,
+    TouchableRipple
 } from "react-native-paper";
 import { app, db } from "../components/firebase";
 import {
-  collection,
-  orderBy,
-  getDocs,
-  doc,
-  deleteDoc
+    collection,
+    orderBy,
+    getDocs,
+    doc,
+    deleteDoc
 } from "firebase/firestore";
 import NutrientModal from "../components/NutrientModal"
 import { auth } from "../components/firebase";
 const USDA_API_KEY = "EA6bttzjzgJuyrtd9V2kKciMSPqhsk1PxG9iTZqM";
 
 const Pantry = ({ navigation }) => {
-  const [showNutrientModal, setShowNutrientModal] = useState(false);
-  const [nutrientData, setNutrientData] = useState(null);
-  const [pantryItems, setPantryItems] = useState([]);
+  
+    const [expiringItems, setExpiringItems] = useState([]);
+    const [showModal, setShowModal] = useState(true);
+    const [currentItem, setCurrentItem] = useState(null);
+    const [showNutrientModal, setShowNutrientModal] = useState(false);
+    const [nutrientData, setNutrientData] = useState(null);
+    const [pantryItems, setPantryItems] = useState([]);
   
 
   // Fetch pantry items from Firestore and update state
@@ -116,21 +113,109 @@ const Pantry = ({ navigation }) => {
     );
   };
 
-  return (
-    <View style={styles.container}>
-      <Appbar.Header>
-        <Appbar.Content title="Your Pantry" />
-      </Appbar.Header>
-      {pantryItems.length === 0 ? (
-        <View style={styles.emptyPantryContainer}>
-          <Image
-            source={require("./IceCreamDoodle.png")}
-            style={{ width: 200, height: 200 }}
-          />
-          <Text style={styles.title}>Your Pantry is Empty!</Text>
-          <Text style={styles.subtitle}>
-            Get started by adding items to your pantry.
-          </Text>
+        return (
+            <>
+                <TouchableRipple
+                    onPress={() => navigation.navigate("PantryItem", { item })}
+                    style={styles.card}
+                >
+                    <Card>
+                        <Card.Content style={styles.cardContent}>
+                            <View style={styles.itemInfo}>
+                                <Title style={styles.itemTitle}>{item.name}</Title>
+                                <Paragraph style={styles.itemDate}>
+                                    Expires: {expirationDate.toDateString()}
+                                </Paragraph>
+                            </View>
+                            <IconButton
+                                icon="close"
+                                size={20}
+                                onPress={() => handleDelete(item.id)}
+                                style={styles.deleteButton}
+                            />
+                        </Card.Content>
+                    </Card>
+                </TouchableRipple>
+
+            </>
+        );
+    };
+
+    return (
+        <View style={styles.container}>
+            <Appbar.Header>
+                <Appbar.Content title="Your Pantry" />
+            </Appbar.Header>
+            {pantryItems.length === 0 ? (
+                <View style={styles.emptyPantryContainer}>
+                    <Image
+                        source={require("./IceCreamDoodle.png")}
+                        style={{ width: 200, height: 200 }}
+                    />
+                    <Text style={styles.title}>Your Pantry is Empty!</Text>
+                    <Text style={styles.subtitle}>
+                        Get started by adding items to your pantry.
+                    </Text>
+                </View>
+            ) : (
+                <>
+                    <FlatList
+                        data={pantryItems}
+                        keyExtractor={(item) => item.id}
+                        renderItem={renderItem}
+                    />
+                        {expiringItems.map((item) => {
+                            const expirationDate = new Date(item.expirationDate.seconds * 1000);
+                            const timeDiff = expirationDate.getTime() - new Date().getTime();
+                            const daysDiff = timeDiff / (1000 * 3600 * 24);
+                            console.log(item.name);
+                            if (daysDiff <= 21) {
+                                return (
+                                    <Modal
+                                        key={item.id}
+                                        visible={showModal}
+                                        transparent={true}
+                                    >
+                                        <View style={styles.centeredView}>
+                                            <View style={styles.modalView}>
+                                                <Text style={styles.modalText}>
+                                                    Is {item.name} still in stock?
+                                                </Text>
+                                                <Button
+                                                    onPress={() => {
+                                                        handleModalClose("Yes", item);
+                                                        
+                                                    }}
+                                                    style={styles.modalButton}
+                                                >
+                                                    Yes
+                                                </Button>
+                                                <Button
+                                                    onPress={() => {
+                                                        handleModalClose("No", item);
+                                                    }}
+                                                    style={styles.modalButton}
+                                                >
+                                                    No
+                                                </Button>
+                                            </View>
+                                        </View>
+                                    </Modal>
+                                );
+                            } else {
+                                return null;
+                            }
+                        })}
+                          
+                </>
+            )}
+            <Button
+                mode="contained"
+                onPress={() => navigation.navigate("AddItem")}
+                style={styles.addButton}
+            >
+                Add Items
+            </Button>
         </View>
       ) : (
         <FlatList
