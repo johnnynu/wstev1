@@ -120,7 +120,7 @@ const Account = ({ navigation }) => {
                 />
                 {!isEnabled && (
                     <List.Item
-                        title={day.toString()}
+                        title={day.toString()} // Replace with database values once possible
                         titleStyle={{ fontSize: 24, marginTop: -40 }}
                         description="Items"
                         descriptionStyle={{ marginLeft: 10 }}
@@ -143,7 +143,7 @@ const Account = ({ navigation }) => {
                 />
                 {!isEnabled && (
                     <List.Item
-                        title={week.toString()}
+                        title={week.toString()} // Replace with database values once possible
                         titleStyle={{ fontSize: 24, marginTop: -40 }}
                         description="Items"
                         descriptionStyle={{ marginLeft: 10 }}
@@ -166,7 +166,7 @@ const Account = ({ navigation }) => {
                 />
                 {!isEnabled && (
                     <List.Item
-                        title={month.toString()}
+                        title={month.toString()} // Replace with database values once possible
                         titleStyle={{ fontSize: 24, marginTop: -40 }}
                         description="Items"
                         descriptionStyle={{ marginLeft: 10 }}
